@@ -10,7 +10,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 import json
 
-df = pd.read_csv(r"C:\Users\nmims.student\Desktop\Carol\Lab 1\Telecom_Tower_Failure_Dataset_10000-1.csv")
+df = pd.read_csv(r""C:\Users\nmims.student\Downloads\Telecom_Tower_Failure_Dataset_10000-1 (1).csv")
 
 df
 
