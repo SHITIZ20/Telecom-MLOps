@@ -1,7 +1,5 @@
 # Generated from: MLOps_Lab1.ipynb
 # Converted at: 2026-07-13T05:17:21.103Z
-# Next step (optional): refactor into modules & generate tests with RunCell
-# Quick start: pip install runcell
 
 import pandas as pd
 import numpy as np
@@ -10,22 +8,20 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 import json
 
-# 1. Load the data safely
+# FIX: Changed from absolute Windows path to a clean, relative path
 df = pd.read_csv("Telecom_Tower_Failure_Dataset_10000-1.csv")
 
-# Clean column names by removing accidental spaces
+# Clean trailing spaces from columns just in case
 df.columns = df.columns.str.strip()
 
-# 2. Extract features and target safely
-# If Tower_ID doesn't exist, we skip it without crashing
+# Safely drop target columns
 columns_to_drop = [col for col in ['Tower_ID', 'Failure_Within_48Hrs'] if col in df.columns]
 X = df.drop(columns=columns_to_drop)
 y = df['Failure_Within_48Hrs']
 
-# 3. Convert any string text categories to numeric numbers (One-Hot Encoding)
+# FIX: Automatically convert any text columns to numbers so sklearn doesn't crash
 X = pd.get_dummies(X, drop_first=True)
 
-# 4. Train model
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=42)
 
 model = RandomForestClassifier(n_estimators=100, random_state=42)
