@@ -8,7 +8,7 @@ phases:
       - pip install -r requirments.txt
   build:
     commands:
-      - python train.py
+      - python MLOps_Lab1.py
 
 artifacts:
   files:
