@@ -10,23 +10,32 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 import json
 
-df = pd.read_csv(r""C:\Users\nmims.student\Downloads\Telecom_Tower_Failure_Dataset_10000-1 (1).csv")
+# 1. Load the data safely
+df = pd.read_csv("Telecom_Tower_Failure_Dataset_10000-1.csv")
 
-df
+# Clean column names by removing accidental spaces
+df.columns = df.columns.str.strip()
 
-X = df.drop(columns=['Tower_ID','Failure_Within_48Hrs'])
+# 2. Extract features and target safely
+# If Tower_ID doesn't exist, we skip it without crashing
+columns_to_drop = [col for col in ['Tower_ID', 'Failure_Within_48Hrs'] if col in df.columns]
+X = df.drop(columns=columns_to_drop)
 y = df['Failure_Within_48Hrs']
 
-X_train,X_test,y_train,y_test = train_test_split(X,y,test_size=0.25,random_state=42)
+# 3. Convert any string text categories to numeric numbers (One-Hot Encoding)
+X = pd.get_dummies(X, drop_first=True)
 
-model= RandomForestClassifier(n_estimators=100,random_state=42)
-model.fit(X_train,y_train)
+# 4. Train model
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=42)
 
-acc = model.score(X_test,y_test)
+model = RandomForestClassifier(n_estimators=100, random_state=42)
+model.fit(X_train, y_train)
+
+acc = model.score(X_test, y_test)
 print("Accuracy: ", acc)
 
-joblib.dump(model,"telecom_tower_model.pkl")
-metrics={"accuracy":acc}
-with open("metrics.json","w") as f:
-    json.dump(metrics,f,indent=4)
+joblib.dump(model, "telecom_tower_model.pkl")
+metrics = {"accuracy": acc}
+with open("metrics.json", "w") as f:
+    json.dump(metrics, f, indent=4)
 print("Training Completed Successfully")
